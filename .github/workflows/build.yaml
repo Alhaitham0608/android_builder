@@ -21,8 +21,9 @@ jobs:
           echo "PROJECT=$(cat project-to-build)" >> $GITHUB_ENV  
    
       - name: Clone project  
-        run: git clone --depth=1 https://github.com/${PROJECT}.git project  
-        env:  
+        run: |  
+          git clone --depth=1 https://github.com/${PROJECT}.git project  
+          env:  
           PROJECT: ${{ env.PROJECT }}  
   
       - name: Build the app  
