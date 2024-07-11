@@ -1,32 +1,39 @@
-name: android_build
-
-on:
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-      - id: get-project
-        name: Get project name
-        run: echo "::set-output name=PROJECT::$(cat project-to-build)"
-      - name: Clone project
-        run: git clone --depth=1 ${{ steps.get-project.outputs.PROJECT }} project
-      - name: Build the app
-        working-directory: ./project
-        run: |
-          if [ ! -f "gradlew" ]; then gradle wrapper; fi
-          chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
-      - name: Upload APK
-        uses: actions/upload-artifact@v2
-        with:
-          name: my-build-apk
-          path: ./**/*.apk
-
+name: android_build  
+  
+on:  
+  workflow_dispatch:  
+  
+jobs:  
+  build:  
+    runs-on: ubuntu-latest  
+    steps:  
+      - name: Checkout the code  
+        uses: actions/checkout@v3 # 使用最新版本的 checkout 动作  
+  
+      - name: Set up JDK  
+        uses: actions/setup-java@v3 # 使用最新版本的 setup-java 动作  
+        with:  
+          java-version: '1.8' # 确保 Java 版本是字符串格式  
+          distribution: 'adopt' # 指定 JDK 的分发版本，这里使用 AdoptOpenJDK  
+  
+      - name: Get project name  
+        id: get-project  
+        run: echo "::set-output name=PROJECT::$(cat project-to-build)"  
+  
+      - name: Clone project  
+        run: git clone --depth=1 https://github.com/${{ steps.get-project.outputs.PROJECT }}.git project  
+        # 假设 project-to-build 文件包含的是 GitHub 仓库的完整路径（例如 org/repo）  
+  
+      - name: Build the app  
+        working-directory: ./project  
+        run: |  
+          chmod +x gradlew  
+          ./gradlew assembleDebug --stacktrace  
+          # 假设 gradlew 文件总是存在，如果可能不存在则需要添加检查逻辑  
+   
+      - name: Upload APK  
+        if: success() # 只有在前面的步骤都成功时才执行上传  
+        uses: actions/upload-artifact@v3 # 使用最新版本的 upload-artifact 动作  
+        with:  
+          name: my-build-apk  
+          path: ./project/**/*.apk # 指定正确的路径来查找 APK 文件
