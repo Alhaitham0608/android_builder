@@ -12,7 +12,7 @@ jobs:
       - name: Set up JDK  
         uses: actions/setup-java@v1  
         with:  
-          java-version: '11' # 修改为至少Java 11  
+          java-version: '11'  
       - id: get-project  
         name: Get project name  
         run: echo "::set-output name=PROJECT::$(cat project-to-build)"  
@@ -23,11 +23,10 @@ jobs:
         run: |  
           mkdir -p /home/runner/work/android_builder/android_builder/project  
           cat > /home/runner/work/android_builder/android_builder/project/build.gradle <<EOF  
-   
           plugins {  
-              id("com.tokeninc.tools.build") version "0.2"  
+              id("com.android.application")  
           }  
-  
+   
           android {  
               compileSdkVersion 30  
               defaultConfig {  
@@ -46,7 +45,7 @@ jobs:
           }  
   
           repositories {  
-              google() // 确保包含了Google的Maven仓库  
+              google()  
               mavenCentral()  
           }  
   
@@ -61,7 +60,6 @@ jobs:
       - name: Build the app  
         working-directory: ./project  
         run: |  
-          if [ ! -f "gradlew" ]; then gradle wrapper; fi  
           chmod +x gradlew  
           ./gradlew assembleDebug --stacktrace  
       - name: Upload APK  
