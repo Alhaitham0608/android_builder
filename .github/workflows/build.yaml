@@ -57,13 +57,16 @@ jobs:
               androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'  
           }  
           EOF  
+      - name: Initialize Gradle Wrapper  
+        working-directory: ./project  
+        run: gradle wrapper  
       - name: Build the app  
         working-directory: ./project  
         run: |  
           chmod +x gradlew  
           ./gradlew assembleDebug --stacktrace  
-      - name: Upload APK  
+       - name: Upload APK  
         uses: actions/upload-artifact@v2  
         with:  
           name: my-build-apk  
-          path: ./**/*.apk
+          path: ./project/**/*.apk
