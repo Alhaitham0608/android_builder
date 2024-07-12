@@ -25,7 +25,7 @@ jobs:
           cat > /home/runner/work/android_builder/android_builder/project/build.gradle <<EOF  
    
           plugins {  
-              id 'com.android.application' version '7.0.0' // 确保插件ID和版本号正确  
+               id("com.tokeninc.tools.build") version "0.2"
           }  
   
           android {  
