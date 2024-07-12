@@ -25,7 +25,7 @@ jobs:
           cat > /home/runner/work/android_builder/android_builder/project/build.gradle <<EOF  
    
           plugins {  
-              id 'com.android.application' version '7.0.0' // 确保指定了插件版本  
+              id 'com.android.application' version '7.0.0' // 确保插件ID和版本号正确  
           }  
   
           android {  
@@ -46,7 +46,7 @@ jobs:
           }  
   
           repositories {  
-              google()  
+              google() // 确保包含了Google的Maven仓库  
               mavenCentral()  
           }  
   
