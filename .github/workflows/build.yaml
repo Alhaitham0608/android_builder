@@ -23,9 +23,11 @@ jobs:
         run: |  
           mkdir -p /home/runner/work/android_builder/android_builder/project  
           cat > /home/runner/work/android_builder/android_builder/project/build.gradle <<EOF  
+   
+          plugins {  
+              id 'com.android.application' version '7.0.0' // 确保指定了插件版本  
+          }  
   
-          apply plugin: 'com.android.application'  
-          
           android {  
               compileSdkVersion 30  
               defaultConfig {  
